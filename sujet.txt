@@ -1,0 +1,44 @@
+Grâce aux prévisions avérées du grand conseil des Prolosaures, un certain nombre de survivants au déluge ont pu se réfugier
+sur quelques îles émergées. Pour communiquer, un pacte a été conclu avec les Algoptéryx, dinosaures volants, grâce auxquels
+les bases de la communication ont pu s'établir entre les différentes îles. Malheureusement, ceux-ci commmencent à se lasser de leur rôle trop peu rémunérateur.
+
+En guise de solution, le grand conseil des Prolosaures a imaginé déployer un grand réseau de téléphones yaourt entre les îles, grâce au concours des Algoptéryx.
+
+Malheureusement, le fil nécessaire à leur confection se fait rare en ces temps post-apocalyptiques, et une récompense est prévue pour celui qui en minimisera l'usage.
+
+Écrivez un programme qui permet de déterminer la longueur de fil minimale nécessaire pour rallier les différentes îles :
+toute île doit pouvoir communiquer, directement ou non, avec toutes les autres îles.
+
+
+Entrées
+L'entrée comprendra :
+
+un entier naturel n représentant le nombre d'îles à rallier sur la première ligne ;
+sur chacune des n lignes suivantes, les coordonnées entières relatives x et y d'une île, séparées par une espace.
+
+
+Sortie
+Vous afficherez en sortie :
+
+un entier représentant la longueur de fil minimale nécessaire, arrondie à l'entier inférieur.
+Contraintes
+1 ≤ n ≤ 1 000 ;
+-10 000 ≤ xi, yi ≤ 10 000.
+
+
+Calcul poids des arcs : (xb-xa)^2 + (yb-ya)^2
+
+
+Lire un fichier :
+
+ifstream file(filePath, ios::in);
+if (file) {
+    string line;
+    while (getline(file, line)) {
+        // Lisez les données ici et effectuez votre traitement ici
+    }
+} else {
+    cerr << "Error file";
+}
+
+

@@ -3,4 +3,4 @@ project(GraphesConcours)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(GraphesConcours main.cpp avalanches.cpp)
+add_executable(GraphesConcours deluge.cpp)

@@ -16,7 +16,7 @@ using namespace std;
 ContestExerciseImpl::ContestExerciseImpl() : Exercise() {}
 
 
-vector<string> split(string str, char delimiter) {
+vector<string> split(const string& str, char delimiter) {
     vector <string> result;
     size_t begin = 0;
     size_t index = str.find(delimiter);
