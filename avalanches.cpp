@@ -69,43 +69,19 @@ vector<int> mooreDijkstra(int s, int n, vector<vector<double>> c) {
         C.push_back(j);
         Cbarre.remove(j);
     }
-    /*for (int i = 0; i < n; ++i) {
-        cout << i << ": " << d[i] << endl;
-    }*/
     return pere;
-}
-
-void display(vector<int> & v)
-{
-    int n = v.size();
-    for(int i = 0; i < (n-1); i++)
-        cerr << v[i] << " ; ";
-    cerr << v[n-1] << endl;
-}
-
-void displayShortestPath(vector<int> pere, vector<vector<double>> c) {
-    for (int i = 0; i < pere.size(); ++i) {
-        int pereActuel = pere[i];
-        int filsActuel = i;
-        double chemin = 0;
-        while (pereActuel != -1) {
-            chemin += c[pereActuel][filsActuel];
-            filsActuel = pereActuel;
-            pereActuel = pere[pereActuel];
-        }
-        cerr << i << " : " << chemin << endl;
-    }
 }
 
 double getShortestPath(vector<int> pere, vector<vector<double>> c, int sommetArrivee) {
     int pereActuel = pere[sommetArrivee];
     int filsActuel = sommetArrivee;
-    double chemin = 0;
+    double chemin = 1;
     while (pereActuel != -1) {
-        chemin += c[pereActuel][filsActuel];
+        chemin = chemin * (1 - c[pereActuel][filsActuel]);
         filsActuel = pereActuel;
         pereActuel = pere[pereActuel];
     }
+    chemin = 1 - chemin;
     return chemin;
 }
 
@@ -122,6 +98,7 @@ void ContestExerciseImpl::main() {
     vector<vector<double>> probas;
     while (std::getline(std::cin, line))
     {
+        /*Lisez les données ici et effectuez votre traitement ici */
         if (n == 0) { // Nombre de sommets
             nbSommets = stoi(line);
             probas.resize(nbSommets, vector<double>(nbSommets));
@@ -135,24 +112,10 @@ void ContestExerciseImpl::main() {
             }
             ++i;
         }
-        /*Lisez les données ici et effectuez votre traitement ici */
         ++n;
     }
     /* Vous pouvez aussi effectuer votre traitement une fois que vous avez lu toutes les données.*/
-    for (int a = 0 ; a < nbSommets ; ++a) {
-        for (int b = 0 ; b < nbSommets ; ++b) {
-            cerr << probas[a][b] << " ; ";
-        }
-        cerr << endl;
-    }
-    if (nbSommets == 3) {
-//        cout << "0.109";
-
-    } else {
-//        cout << probas[sommetDepart][sommetArrivee];
-    }
     vector<int> pere = mooreDijkstra(sommetDepart, nbSommets, probas);
-//    display(pere);
-//    displayShortestPath(pere, probas);
     cerr << getShortestPath(pere, probas, sommetArrivee) << endl;
+    cout << getShortestPath(pere, probas, sommetArrivee) << endl;
 }
