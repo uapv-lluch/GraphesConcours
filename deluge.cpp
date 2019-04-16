@@ -1,3 +1,5 @@
+#include <utility>
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -10,13 +12,13 @@
 
 using namespace std;
 
-struct arc {
+struct arete {
     double poids;
     int sommetDepart;
     int sommetArrivee;
 
-    bool operator <(const arc & arcObj) const {
-        return poids < arcObj.poids;
+    bool operator <(const arete & areteObj) const {
+        return poids < areteObj.poids;
     }
 };
 
@@ -35,60 +37,63 @@ vector<string> split(const string& str, char delimiter) {
     return result;
 }
 
-bool isCycle(set<arc> arcs, arc a) {
-    // TODO
-    return true;
-}
-
-void prim(int n) {
-    vector<int> A(n);
-    A.push_back(0);
-    int i = 1;
-    while (i != n) {
-
-        ++i;
-    }
-}
-
-unordered_set<int> kruskal(int n, list<arc> e) {
-    unordered_set<int> A;
-    set<arc> arcs;
-    vector<int> departs;
-    A.insert(0);
-
-    for (list<arc>::iterator it = e.begin() ; it != e.end() ; ++it) {
-        if (arcs.find(*it) == arcs.end() // si l'arete n'a pas ete choisie
-            && A.find(it->sommetArrivee) == A.end()) { // si l'arete ne cree pas de cycle A REFAIRE
-            A.insert(it->sommetArrivee);
-            arcs.insert(*it);
-            departs.push_back(it->sommetDepart);
-            cout << setw(3) << it->sommetArrivee << ' ';
+bool isCycle(int sommet, list<int> adj[], vector<bool> visited, int parent) {
+    for (auto & it : adj[sommet]) {
+        if (!visited[it]) {
+            if (isCycle(it, adj, visited, sommet)) {
+                return true;
+            }
+        } else if(it != parent) {
+            return true;
         }
     }
-    cout << endl;
-    for (int i = 0 ; i < departs.size() ; ++i) {
-        cout << setw(3) << departs[i] << ' ';
-    }
-    double sum = 0;
-    for (set<arc>::iterator it = arcs.begin() ; it != arcs.end() ; ++it) {
-        sum += it->poids;
-    }
-    cout << endl << sum << endl;
-    return A;
+    return false;
 }
 
-double kruskalPoids(int n, list<arc> e) {
-    unordered_set<int> A;
-//    A.insert(0);
+
+set<arete> kruskal(int n, list<arete> e) {
+    set<int> sommets;
+    set<arete> aretes;
+    vector<bool> visited(n, false);
+    list<int> adj[n];
+    arete firstArc = *e.begin();
+    aretes.insert(firstArc);
+    sommets.insert(firstArc.sommetDepart);
+    sommets.insert(firstArc.sommetArrivee);
+    visited[firstArc.sommetDepart] = true;
+    visited[firstArc.sommetArrivee] = true;
+    adj[firstArc.sommetDepart].push_back(firstArc.sommetArrivee);
+    adj[firstArc.sommetArrivee].push_back(firstArc.sommetDepart);
+    while (sommets.size() < n) {
+        for (auto & it : e) {
+            if (aretes.find(it) == aretes.end() // si l'arete n'a pas ete choisie
+                // si l'arete ne cree pas de cycle
+                && visited[it.sommetDepart]
+                && !visited[it.sommetArrivee]
+                && !isCycle(it.sommetArrivee, adj, visited, -1)) {
+                sommets.insert(it.sommetArrivee);
+                visited[it.sommetArrivee] = true;
+                adj[it.sommetDepart].push_back(it.sommetArrivee);
+                adj[it.sommetArrivee].push_back(it.sommetDepart);
+                aretes.insert(it);
+                break;
+            }
+        }
+    }
+    return aretes;
+}
+
+double kruskalPoids(int n, list<arete> e, bool rounded=false) {
     double poids = 0;
-//    int i = 1;
-    for (list<arc>::iterator it = e.begin() ; it != e.end() ; ++it) {
-        if (it->sommetDepart != it->sommetArrivee && A.find(it->sommetArrivee) == A.end()) {
-            A.insert(it->sommetArrivee);
-            poids += it->poids;
-        }
+    set<arete> arbre = kruskal(n, std::move(e));
+    for (auto it : arbre) {
+        poids += it.poids;
     }
-    return poids;
+    if (rounded) {
+        return (int)poids;
+    } else {
+        return poids;
+    }
 }
 
 
@@ -100,7 +105,7 @@ int main() {
         int nbSommets = 0;
         vector<vector<double>> sommets;
         vector<vector<double>> arcsMatrix;
-        list<arc> arcsList; // { poids , sommetDepart, sommetArrivee }
+        list<arete> aretesList; // { poids , sommetDepart, sommetArrivee }
         while (getline(file, line)) {
             // Lisez les données ici et effectuez votre traitement ici
             if (n == 0) { // Nombre de sommets
@@ -120,24 +125,14 @@ int main() {
                 double poids = sqrt(pow((sommets[j][0] - sommets[i][0]), 2) + pow((sommets[j][1] - sommets[i][1]), 2));
                 arcsMatrix[i][j] = poids;
                 if (i != j) {
-                    arcsList.push_back({poids, i, j});
+                    aretesList.push_back({poids, i, j});
                 }
-//                cout << fixed << setprecision(0) << setw(6) << arcsMatrix[i][j] << ' ';
             }
-//            cout << endl;
         }
-        arcsList.sort();
-
-        /*for (list<arc>::iterator it = arcsList.begin() ; it != arcsList.end() ; ++it) {
-            cout << it->poids << ' ' << it->sommetDepart << ' ' << it->sommetArrivee << endl;
-        }*/
-        cout << endl;
-        unordered_set<int> arbre = kruskal(nbSommets, arcsList);
-        double poidsArbre = kruskalPoids(nbSommets, arcsList);
+        aretesList.sort();
+        set<arete> arbre = kruskal(nbSommets, aretesList);
+        double poidsArbre = kruskalPoids(nbSommets, aretesList, true);
         cout << poidsArbre << endl;
-        /*for (unordered_set<int>::iterator it = arbre.begin() ; it != arbre.end() ; ++it) {
-            cout << *it << ' ';
-        }*/
     } else {
         cerr << "Error file";
         return -1;
