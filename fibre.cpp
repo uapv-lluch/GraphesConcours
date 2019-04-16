@@ -75,12 +75,11 @@ vector<arete> kruskal(int n, list<arete> e) {
     adj[firstArc.sommetArrivee].push_back(firstArc.sommetDepart);
     while (sommets.size() < n) {
         for (auto & it : e) {
-            if (/*aretes.find(it) == aretes.end()*/ // si l'arete n'a pas ete choisie
-                    find(aretes.begin(), aretes.end(), it) == aretes.end()
-                    // si l'arete ne cree pas de cycle
-                    && visited[it.sommetDepart]
-                    && !visited[it.sommetArrivee]
-                    && !isCycle(it.sommetArrivee, adj, visited, -1)) {
+            if (find(aretes.begin(), aretes.end(), it) == aretes.end() // si l'arete n'a pas ete choisie
+                // si l'arete ne cree pas de cycle
+                && visited[it.sommetDepart]
+                && !visited[it.sommetArrivee]
+                && !isCycle(it.sommetArrivee, adj, visited, -1)) {
                 sommets.insert(it.sommetArrivee);
                 visited[it.sommetArrivee] = true;
                 adj[it.sommetDepart].push_back(it.sommetArrivee);
