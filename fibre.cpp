@@ -14,6 +14,7 @@
 #include <cmath>
 #include <string>
 #include <algorithm>
+#include <iomanip>
 
 #include "exercise.hpp"
 
@@ -137,5 +138,5 @@ void ContestExerciseImpl::main() {
     }
     aretesList.sort();
     double poidsArbre = kruskalPoids(nbSommets, aretesList);
-    cout << poidsArbre;
+    cout << setprecision(50) << poidsArbre;
 }

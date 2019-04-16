@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <iomanip>
 
 
 using namespace std;
@@ -101,7 +102,7 @@ double kruskalPoids(int n, list<arete> e, bool rounded=false) {
 
 
 int main() {
-    ifstream file("../resources/fibre/input1.txt", ios::in);
+    ifstream file("../resources/fibre/input3.txt", ios::in);
     if (file) {
         string line;
         int n = 0;
@@ -131,7 +132,7 @@ int main() {
         }
         aretesList.sort();
         double poidsArbre = kruskalPoids(nbSommets, aretesList);
-        cout << poidsArbre;
+        cout << setprecision(50) << poidsArbre;
     } else {
         cerr << "Error file";
         return -1;
