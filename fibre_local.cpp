@@ -1,14 +1,14 @@
-#include <utility>
 
-#include <iostream>
+
 #include <fstream>
 #include <vector>
-#include <cmath>
-#include <iomanip>
-#include <algorithm>
 #include <list>
 #include <set>
-#include <unordered_set>
+#include <cmath>
+#include <iostream>
+#include <string>
+#include <algorithm>
+
 
 using namespace std;
 
@@ -17,7 +17,7 @@ struct arete {
     int sommetDepart;
     int sommetArrivee;
 
-    bool operator <(const arete & areteObj) const {
+    bool operator<(const arete & areteObj) const {
         return poids < areteObj.poids;
     }
     bool operator==(const arete & areteObj) const {
@@ -53,7 +53,6 @@ bool isCycle(int sommet, list<int> adj[], vector<bool> visited, int parent) {
     return false;
 }
 
-
 vector<arete> kruskal(int n, list<arete> e) {
     set<int> sommets;
     vector<arete> aretes;
@@ -70,11 +69,11 @@ vector<arete> kruskal(int n, list<arete> e) {
     while (sommets.size() < n) {
         for (auto & it : e) {
             if (/*aretes.find(it) == aretes.end()*/ // si l'arete n'a pas ete choisie
-                    find(aretes.begin(), aretes.end(), it) == aretes.end()
-                    // si l'arete ne cree pas de cycle
-                    && visited[it.sommetDepart]
-                    && !visited[it.sommetArrivee]
-                    && !isCycle(it.sommetArrivee, adj, visited, -1)) {
+                find(aretes.begin(), aretes.end(), it) == aretes.end()
+                // si l'arete ne cree pas de cycle
+                && visited[it.sommetDepart]
+                && !visited[it.sommetArrivee]
+                && !isCycle(it.sommetArrivee, adj, visited, -1)) {
                 sommets.insert(it.sommetArrivee);
                 visited[it.sommetArrivee] = true;
                 adj[it.sommetDepart].push_back(it.sommetArrivee);
@@ -101,8 +100,9 @@ double kruskalPoids(int n, list<arete> e, bool rounded=false) {
 }
 
 
+
 int main() {
-    ifstream file("../resources/deluge2.txt", ios::in);
+    ifstream file("../resources/fibre/input1.txt", ios::in);
     if (file) {
         string line;
         int n = 0;
@@ -126,14 +126,13 @@ int main() {
             for (int j = 0 ; j < sommets.size() ; ++j) {
                 if (i != j) {
                     double poids = sqrt(pow((sommets[j][0] - sommets[i][0]), 2) + pow((sommets[j][1] - sommets[i][1]), 2));
-                    aretesList.push_back({poids, i, j});
+                    aretesList.push_back({ poids, i, j });
                 }
             }
         }
         aretesList.sort();
-//        vector<arete> arbre = kruskal(nbSommets, aretesList);
-        double poidsArbre = kruskalPoids(nbSommets, aretesList, true);
-        cout << poidsArbre << endl;
+        double poidsArbre = kruskalPoids(nbSommets, aretesList);
+        cout << poidsArbre;
     } else {
         cerr << "Error file";
         return -1;

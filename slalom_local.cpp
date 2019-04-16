@@ -1,18 +1,11 @@
-/*******
- * Read input from cin
- * Use cout << ... to output your result to STDOUT.
- * Use cerr << ... to output debugging information to STDERR
- * ***/
 #include <iostream>
 #include <vector>
 #include <limits>
 #include <sstream>
 #include <iomanip>
-#include "exercise.hpp"
+#include <fstream>
 
 using namespace std;
-
-ContestExerciseImpl::ContestExerciseImpl() : Exercise() {}
 
 struct arc {
     int poids;
@@ -52,14 +45,15 @@ int getSommet(int i, int j, int taille) {
     return i*taille + j + 1;
 }
 
-void ContestExerciseImpl::main() {
+int main() {
+    ifstream file("../resources/slalom/input4.txt", ios::in);
     std::string line;
     int n = 0;
     int taille = 0;
     vector<vector<int>> portes;
     vector<vector<int>> dist;
     vector<arc> arcs;
-    while (std::getline(std::cin, line))
+    while (std::getline(file, line))
     {
         /*Lisez les données ici et effectuez votre traitement ici */
         if (n == 0) {
@@ -94,4 +88,5 @@ void ContestExerciseImpl::main() {
     }
     vector<int> L = bellmanLong(arcs, taille*taille+1);
     cout << L[L.size()-1];
+    return 0;
 }

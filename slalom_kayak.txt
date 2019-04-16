@@ -1,1 +1,27 @@
-Le graphe est un graphe dont chaque sommet représente une case de la grille. Un sommet A est relié par un arc à un sommet B si la case correspondant au sommet B est atteignable depuis la case correspondant au sommet A. Les arcs entrants dans un sommet qui représente une case "porte" ont pour valeur 1, les autres ont pour valeur 0. Il n'y a pas de cycle car le graphe prend en compte le courant, et donc on en peut pas aller à contre courant. L'algorithme utilisé est une variant de l'algorithme de Bellman-Ford pour le plus long chemin.
+Le graphe est un graphe dont chaque sommet représente une case de la grille et un sommet de départ.
+Un sommet A est relié par un arc à un sommet B si la case correspondant au sommet B est atteignable depuis la case correspondant au sommet A.
+Les arcs entrants dans un sommet qui représente une case "porte" ont pour valeur 1, les autres ont pour valeur 0.
+Il n'y a pas de cycle car le graphe prend en compte le courant, et donc on en peut pas aller à contre courant et donc revenir sur un sommet déjà visité.
+L'algorithme utilisé est une variante de l'algorithme de Bellman-Ford mais pour le plus long chemin.
+
+Données
+    −→G un graphe orienté valué sans circuit de longueur strictement positive
+    s un sommet de −→G
+Variables locales
+    L tableau des distances depuis un sommet s
+    Pred tableau des successeurs sur un plus court chemin à t
+    (u, v) un arc
+début
+    initialisation
+        L[s] := 0
+    pour tous les sommets v != s faire L[v] := −∞
+    tant que L change faire
+        pour chaque arc (u, v) de −→G faire
+            si L(v) < L(u) + length((u, v, −→G)) alors
+                L(v) := L(u) + length((u, v, −→G))
+                Pred[v] := u
+            finsi
+        finprch
+    fintq
+fin
+Sorties : L, Pred

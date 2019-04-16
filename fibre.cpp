@@ -1,14 +1,21 @@
-#include <utility>
-
+/*******
+ * Read input from cin
+ * Use cout << ... to output your result to STDOUT.
+ * Use cerr << ... to output debugging information to STDERR
+ * ***/
 #include <iostream>
+#include <limits>
+#include <sstream>
+
 #include <fstream>
 #include <vector>
-#include <cmath>
-#include <iomanip>
-#include <algorithm>
 #include <list>
 #include <set>
-#include <unordered_set>
+#include <cmath>
+#include <string>
+#include <algorithm>
+
+#include "exercise.hpp"
 
 using namespace std;
 
@@ -17,7 +24,7 @@ struct arete {
     int sommetDepart;
     int sommetArrivee;
 
-    bool operator <(const arete & areteObj) const {
+    bool operator<(const arete & areteObj) const {
         return poids < areteObj.poids;
     }
     bool operator==(const arete & areteObj) const {
@@ -52,7 +59,6 @@ bool isCycle(int sommet, list<int> adj[], vector<bool> visited, int parent) {
     }
     return false;
 }
-
 
 vector<arete> kruskal(int n, list<arete> e) {
     set<int> sommets;
@@ -100,43 +106,37 @@ double kruskalPoids(int n, list<arete> e, bool rounded=false) {
     }
 }
 
+ContestExerciseImpl::ContestExerciseImpl() : Exercise() {}
 
-int main() {
-    ifstream file("../resources/deluge2.txt", ios::in);
-    if (file) {
-        string line;
-        int n = 0;
-        int nbSommets = 0;
-        vector<vector<double>> sommets;
-        list<arete> aretesList; // { poids , sommetDepart, sommetArrivee }
-        while (getline(file, line)) {
-            // Lisez les données ici et effectuez votre traitement ici
-            if (n == 0) { // Nombre de sommets
-                nbSommets = stoi(line);
-                sommets.resize(nbSommets, vector<double >(2));
-            } else { // Coordonnées
-                vector<string> coordStr = split(line, ' ');
-                sommets[n-1][0] = stod(coordStr[0]);
-                sommets[n-1][1] = stod(coordStr[1]);
-            }
-            ++n;
+void ContestExerciseImpl::main() {
+    std::string line;
+    int n = 0;
+    int nbSommets = 0;
+    vector<vector<double>> sommets;
+    list<arete> aretesList; // { poids , sommetDepart, sommetArrivee }
+    while (std::getline(std::cin, line))
+    {
+        /*Lisez les données ici et effectuez votre traitement ici */
+        if (n == 0) { // Nombre de sommets
+            nbSommets = stoi(line);
+            sommets.resize(nbSommets, vector<double >(2));
+        } else { // Coordonnées
+            vector<string> coordStr = split(line, ' ');
+            sommets[n-1][0] = stod(coordStr[0]);
+            sommets[n-1][1] = stod(coordStr[1]);
         }
-        // Vous pouvez aussi effectuer votre traitement une fois que vous avez lu toutes les données.
-        for (int i = 0 ; i < sommets.size() ; ++i) {
-            for (int j = 0 ; j < sommets.size() ; ++j) {
-                if (i != j) {
-                    double poids = sqrt(pow((sommets[j][0] - sommets[i][0]), 2) + pow((sommets[j][1] - sommets[i][1]), 2));
-                    aretesList.push_back({poids, i, j});
-                }
-            }
-        }
-        aretesList.sort();
-//        vector<arete> arbre = kruskal(nbSommets, aretesList);
-        double poidsArbre = kruskalPoids(nbSommets, aretesList, true);
-        cout << poidsArbre << endl;
-    } else {
-        cerr << "Error file";
-        return -1;
+        ++n;
     }
-    return 0;
+    /* Vous pouvez aussi effectuer votre traitement une fois que vous avez lu toutes les données.*/
+    for (int i = 0 ; i < sommets.size() ; ++i) {
+        for (int j = 0 ; j < sommets.size() ; ++j) {
+            if (i != j) {
+                double poids = sqrt(pow((sommets[j][0] - sommets[i][0]), 2) + pow((sommets[j][1] - sommets[i][1]), 2));
+                aretesList.push_back({ poids, i, j });
+            }
+        }
+    }
+    aretesList.sort();
+    double poidsArbre = kruskalPoids(nbSommets, aretesList);
+    cout << poidsArbre;
 }
