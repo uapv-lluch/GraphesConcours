@@ -101,34 +101,40 @@ double kruskalPoids(int n, list<arete> e, bool rounded=false) {
 
 
 int main() {
-    string line;
-    int n = 0;
-    int nbSommets = 0;
-    vector<vector<double>> sommets;
-    list<arete> aretesList; // { poids , sommetDepart, sommetArrivee }
-    while (getline(cin, line)) {
-        // On lit les données et on stocke le nombre de sommets et les coordonnées
-        if (n == 0) { // Nombre de sommets
-            nbSommets = stoi(line);
-            sommets.resize(nbSommets, vector<double >(2));
-        } else { // Coordonnées
-            vector<string> coordStr = split(line, ' ');
-            sommets[n-1][0] = stod(coordStr[0]);
-            sommets[n-1][1] = stod(coordStr[1]);
+    ifstream file("../resources/deluge.txt", ios::in);
+    if (file) {
+        string line;
+        int n = 0;
+        int nbSommets = 0;
+        vector<vector<double>> sommets;
+        list<arete> aretesList; // { poids , sommetDepart, sommetArrivee }
+        while (getline(file, line)) {
+            // On lit les données et on stocke le nombre de sommets et les coordonnées
+            if (n == 0) { // Nombre de sommets
+                nbSommets = stoi(line);
+                sommets.resize(nbSommets, vector<double >(2));
+            } else { // Coordonnées
+                vector<string> coordStr = split(line, ' ');
+                sommets[n-1][0] = stod(coordStr[0]);
+                sommets[n-1][1] = stod(coordStr[1]);
+            }
+            ++n;
         }
-        ++n;
-    }
-    // On parcours toutes les aretes possible et on les stocke avec leur poids
-    for (int i = 0 ; i < sommets.size() ; ++i) {
-        for (int j = 0 ; j < sommets.size() ; ++j) {
-            if (i != j) {
-                double poids = sqrt(pow((sommets[j][0] - sommets[i][0]), 2) + pow((sommets[j][1] - sommets[i][1]), 2));
-                aretesList.push_back({poids, i, j});
+        // On parcours toutes les aretes possible et on les stocke avec leur poids
+        for (int i = 0 ; i < sommets.size() ; ++i) {
+            for (int j = 0 ; j < sommets.size() ; ++j) {
+                if (i != j) {
+                    double poids = sqrt(pow((sommets[j][0] - sommets[i][0]), 2) + pow((sommets[j][1] - sommets[i][1]), 2));
+                    aretesList.push_back({poids, i, j});
+                }
             }
         }
+        aretesList.sort(); // on trie la liste des aretes par ordre croissant des poids (surcharge d'operateur dans la struct arete)
+        double poidsArbre = kruskalPoids(nbSommets, aretesList, true); // on utilise l'algorithme de Kruskal pour calculer le poids de l'arbre couvrant minimal
+        cout << poidsArbre << endl; // on affiche le poids de l'arbre couvrant minimal
+    } else {
+        cerr << "Error file";
+        return -1;
     }
-    aretesList.sort(); // on trie la liste des aretes par ordre croissant des poids (surcharge d'operateur dans la struct arete)
-    double poidsArbre = kruskalPoids(nbSommets, aretesList, true); // on utilise l'algorithme de Kruskal pour calculer le poids de l'arbre couvrant minimal
-    cout << poidsArbre << endl; // on affiche le poids de l'arbre couvrant minimal
     return 0;
 }

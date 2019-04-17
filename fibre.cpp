@@ -116,7 +116,7 @@ void ContestExerciseImpl::main() {
     list<arete> aretesList; // { poids , sommetDepart, sommetArrivee }
     while (std::getline(std::cin, line))
     {
-        /*Lisez les données ici et effectuez votre traitement ici */
+        // On lit les données et on stocke le nombre de sommets et les coordonnées
         if (n == 0) { // Nombre de sommets
             nbSommets = stoi(line);
             sommets.resize(nbSommets, vector<double >(2));
@@ -127,7 +127,7 @@ void ContestExerciseImpl::main() {
         }
         ++n;
     }
-    /* Vous pouvez aussi effectuer votre traitement une fois que vous avez lu toutes les données.*/
+    // On parcours toutes les aretes possible et on les stocke avec leur poids
     for (int i = 0 ; i < sommets.size() ; ++i) {
         for (int j = 0 ; j < sommets.size() ; ++j) {
             if (i != j) {
@@ -136,7 +136,7 @@ void ContestExerciseImpl::main() {
             }
         }
     }
-    aretesList.sort();
-    double poidsArbre = kruskalPoids(nbSommets, aretesList);
-    cout << setprecision(50) << poidsArbre;
+    aretesList.sort(); // on trie la liste des aretes par ordre croissant des poids (surcharge d'operateur dans la struct arete)
+    double poidsArbre = kruskalPoids(nbSommets, aretesList); // on utilise l'algorithme de Kruskal pour calculer le poids de l'arbre couvrant minimal
+    cout << setprecision(50) << poidsArbre; // on affiche le poids de l'arbre couvrant minimal avec une precision de 50 (une grande precision pour que le site le valide)
 }

@@ -1,9 +1,10 @@
-Le graphe est un graphe dont chaque sommet représente une case de la grille et un sommet de départ.
-Un sommet A est relié par un arc à un sommet B si la case correspondant au sommet B est atteignable depuis la case correspondant au sommet A.
-Les arcs entrants dans un sommet qui représente une case "porte" ont pour valeur 1, les autres ont pour valeur 0.
-Il n'y a pas de cycle car le graphe prend en compte le courant, et donc on en peut pas aller à contre courant et donc revenir sur un sommet déjà visité.
+Le graphe est un graphe dont chaque sommet représente une case de la grille et un sommet initial qui ne represente aucune case de la grille.
+Un sommet A est relié par un arc à un sommet B si la case correspondant au sommet B est atteignable depuis la case correspondant au sommet A selon les règeles définies dans le sujet.
+Les arcs entrants dans un sommet qui représente une case "porte" ont pour poids 1, les autres ont pour poids 0.
+Il n'y a pas de cycle car le graphe prend en compte le courant, on ne peut pas aller à contre courant et donc revenir sur un sommet déjà visité.
 L'algorithme utilisé est une variante de l'algorithme de Bellman-Ford mais pour le plus long chemin.
 
+L'algorithme :
 Données
     −→G un graphe orienté valué sans circuit de longueur strictement positive
     s un sommet de −→G

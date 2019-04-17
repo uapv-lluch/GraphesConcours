@@ -98,7 +98,7 @@ void ContestExerciseImpl::main() {
     vector<vector<double>> probas;
     while (std::getline(std::cin, line))
     {
-        /*Lisez les données ici et effectuez votre traitement ici */
+        // On lit les données et on stocke le nombre de sommets les sommets de depart et d'arrivée du chemin et les probabilité d'avalanches des pistes (poids des aretes)
         if (n == 0) { // Nombre de sommets
             nbSommets = stoi(line);
             probas.resize(nbSommets, vector<double>(nbSommets));
@@ -114,8 +114,6 @@ void ContestExerciseImpl::main() {
         }
         ++n;
     }
-    /* Vous pouvez aussi effectuer votre traitement une fois que vous avez lu toutes les données.*/
-    vector<int> pere = mooreDijkstra(sommetDepart, nbSommets, probas);
-    cerr << getShortestPath(pere, probas, sommetArrivee) << endl;
-    cout << getShortestPath(pere, probas, sommetArrivee) << endl;
+    vector<int> pere = mooreDijkstra(sommetDepart, nbSommets, probas); // on utilise l'algorithme de Moore-Dijkstra pour récupérer la liste des predecesseurs de chaque sommet par le plus court chemin
+    cout << getShortestPath(pere, probas, sommetArrivee) << endl; // on affiche la probabilité d'avalanche du plus court chemin (la probabilité d'avalanche la plus faible pour aller d'un sommet A à un sommet B)
 }

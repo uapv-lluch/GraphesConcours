@@ -61,7 +61,7 @@ void ContestExerciseImpl::main() {
     vector<arc> arcs;
     while (std::getline(std::cin, line))
     {
-        /*Lisez les données ici et effectuez votre traitement ici */
+        // On lit les données et on stocke la taille de la grille et les emplacements des portes dans une matrice
         if (n == 0) {
             taille = stoi(line);
             portes.resize(taille, vector<int>(taille));
@@ -73,8 +73,8 @@ void ContestExerciseImpl::main() {
         }
         ++n;
     }
-    /* Vous pouvez aussi effectuer votre traitement une fois que vous avez lu toutes les données.*/
-    arcs.push_back({ portes[0][0], 0, 1 });
+    // On parcours tous les arcs possible et on les stocke avec leur poids
+    arcs.push_back({ portes[0][0], 0, 1 }); // on créé l'arc qui part du sommetInitial au premier sommet de la grille
     for (int i = 0 ; i < taille ; ++i) {
         for (int j = 0 ; j < taille ; ++j) {
             int sommetCourant = getSommet(i, j, taille);
@@ -92,6 +92,6 @@ void ContestExerciseImpl::main() {
             }
         }
     }
-    vector<int> L = bellmanLong(arcs, taille*taille+1);
-    cout << L[L.size()-1];
+    vector<int> L = bellmanLong(arcs, taille*taille+1); // on utilise une variante de l'algorithme de Bellman pour le plus long chemin pour recuperer un tableau des distances au sommet initial
+    cout << L[L.size()-1]; // on affiche la distance en prenant le plus long chemin du dernier sommet de la grille
 }
